@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../models/products.dart';
+import './product.dart';
 
 class Products with ChangeNotifier {
   // ignore: prefer_final_fields
@@ -48,6 +48,10 @@ class Products with ChangeNotifier {
   ];
 
   List<Product> get items => [..._items];
+
+  Product findById(id){
+    return _items.firstWhere((product) => product.id == id);
+  }
 
   void addProducts(){
     // _items.add(value);
