@@ -12,6 +12,6 @@ class Product {
       required this.description,
       required this.amount,
       required this.imageUrl,
-    this.isFavourite = false
+      this.isFavourite = false
       });
 }
