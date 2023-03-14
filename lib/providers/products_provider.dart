@@ -47,6 +47,10 @@ class Products with ChangeNotifier {
     ),
   ];
 
+  List<Product> get favouriteItems{
+    return _items.where((element) => element.isFavourite).toList();
+  }
+
   List<Product> get items => [..._items];
 
   Product findById(id){
