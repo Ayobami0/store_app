@@ -15,6 +15,28 @@ class Cart with ChangeNotifier {
     });
     return total;
   }
+  void removeItem(String productId){
+    _items.remove(productId);
+    notifyListeners();
+  }
+
+  void updateItem(bool add, productId){
+    if  (!add){
+      _items.update(productId, (value) => CartItem(
+          id: value.id,
+          title: value.title,
+          quantity: value.quantity + 1,
+          price: value.price));
+    }
+    else{
+      _items.update(productId, (value) => CartItem(
+          id: value.id,
+          title: value.title,
+          quantity: value.quantity - 1,
+          price: value.price));
+    }
+    notifyListeners();
+  }
 
   void addItem(String productId, double price, String title) {
     if (_items.containsKey(productId)) {
@@ -34,6 +56,11 @@ class Cart with ChangeNotifier {
               quantity: 1,
               price: price));
     }
+    notifyListeners();
+  }
+
+  void clear() {
+    _items = {};
     notifyListeners();
   }
 }
