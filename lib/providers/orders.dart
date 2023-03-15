@@ -5,13 +5,13 @@ class OrderModel {
   final String id;
   final double amount;
   final List<CartItem> orderList;
-  final DateTime time;
+  final DateTime dateTime;
 
   OrderModel(
       {required this.id,
       required this.amount,
       required this.orderList,
-      required this.time});
+      required this.dateTime});
 }
 
 class Orders with ChangeNotifier {
@@ -26,7 +26,7 @@ class Orders with ChangeNotifier {
             id: DateTime.now().toString(),
             amount: total,
             orderList: cartItems,
-            time: DateTime.now()));
+            dateTime: DateTime.now()));
     notifyListeners();
   }
 }
