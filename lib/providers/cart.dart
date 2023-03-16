@@ -21,19 +21,22 @@ class Cart with ChangeNotifier {
   }
 
   void updateItem(bool add, productId){
-    if  (!add){
+    if (!_items.containsKey(productId)){return;}
+    if  (add){
       _items.update(productId, (value) => CartItem(
           id: value.id,
           title: value.title,
           quantity: value.quantity + 1,
           price: value.price));
     }
-    else{
+    else if(_items[productId]!.quantity > 1){
       _items.update(productId, (value) => CartItem(
           id: value.id,
           title: value.title,
           quantity: value.quantity - 1,
           price: value.price));
+    }else{
+      _items.remove(productId);
     }
     notifyListeners();
   }

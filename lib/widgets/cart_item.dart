@@ -25,14 +25,19 @@ class CartItem extends StatelessWidget {
       child: Dismissible(
         key: ValueKey(id),
         direction: DismissDirection.endToStart,
+        confirmDismiss: (direction){
+          return showDialog(
+            context: context,
+            builder: (ctx) => const CustomConfirmationDialog());
+        },
         onDismissed: (direction) {
           cart.removeItem(productId);
         },
         background: Container(
-          margin: EdgeInsets.symmetric(vertical: 8),
+          margin: const EdgeInsets.symmetric(vertical: 8),
           alignment: Alignment.centerRight,
           color: Theme.of(context).errorColor,
-          child: Icon(
+          child: const Icon(
             Icons.delete,
             size: 40,
           ),
@@ -56,18 +61,15 @@ class CartItem extends StatelessWidget {
               child: Row(
                 children: [
                   Consumer<Cart>(
-                    builder: (ctx, cartItem, child) => Text('x${cartItem.items[productId]!.quantity}', style: TextStyle(fontSize: 30),)),
+                    builder: (ctx, cartItem, child) => Text('x${cartItem.items[productId]!.quantity}', style: const TextStyle(fontSize: 30),)),
                   Column(
                     children: [
                       IconButton(onPressed: (){
-                          cart.updateItem(false, productId);
-                        }, icon: Icon(Icons.add, size: 40,)),
-                      IconButton(onPressed: (){
-                          if (quantity <= 1){
-                            cart.removeItem(productId);
-                          }
                           cart.updateItem(true, productId);
-                        }, icon: Icon(Icons.remove, size: 40,)),
+                        }, icon: const Icon(Icons.add, size: 40,)),
+                      IconButton(onPressed: (){
+                          cart.updateItem(false, productId);
+                        }, icon: const Icon(Icons.remove, size: 40,)),
                     ],
                   ),
                 ],
@@ -77,5 +79,27 @@ class CartItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomConfirmationDialog extends StatelessWidget {
+  const CustomConfirmationDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Are you sure?'),
+      content: const Text('Do you want to remove the item from your cart'),
+      actions: [
+        TextButton(onPressed: (){
+            Navigator.of(context).pop(false);
+          }, child: const Text('No')),
+        TextButton(onPressed: (){
+            Navigator.of(context).pop(true);
+          }, child: const Text('Yes'))
+      ],
+          );
   }
 }

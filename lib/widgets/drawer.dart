@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/screens/users_products.dart';
 
 import '../screens/orders.dart';
 
@@ -33,7 +34,14 @@ class CustomDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
             },
             title: const Text('Orders'),
-          )
+          ),  ListTile (
+            leading: const Icon(Icons.new_label),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+            },
+            title: const Text('User Products'),
+          ),
+
         ],
       ),
     );

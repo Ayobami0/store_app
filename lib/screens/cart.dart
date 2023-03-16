@@ -18,7 +18,7 @@ class CartScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Expanded(
