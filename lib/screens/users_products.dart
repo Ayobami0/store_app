@@ -35,4 +35,3 @@ class UserProductsScreen extends StatelessWidget {
     );
   }
 }
-
