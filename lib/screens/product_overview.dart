@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:store_app/screens/cart.dart';
-import 'package:store_app/widgets/badge.dart';
+import 'package:store_app/widgets/badge.dart' as badge;
 
 import '../providers/cart.dart';
 import '../widgets/drawer.dart';
 import '../widgets/products_grid.dart';
+import '../providers/products_provider.dart';
 
 enum FilterOptions {
   favourites,
@@ -21,6 +23,25 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool _showFavourites = false;
+  bool _isLoading = false;
+  bool _isInit = true;
+
+  @override
+  void initState() {
+    _isInit = true;
+    super.initState();
+  }
+  @override
+  void didChangeDependencies() {
+    if (_isInit){
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Products>(context, listen: false).fetchProducts().then((_) =>
+          setState((){_isLoading = false;}));
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +51,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         title: const Text('MyStore'),
         actions: [
           Consumer<Cart>(
-            builder: (_, cart, c) => Badge(
+            builder: (_, cart, c) => badge.Badge(
                 value: cart.itemCount,
                 child: c!),
             child: IconButton(icon: const Icon(Icons.shopping_cart), onPressed: () {
@@ -58,7 +79,8 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           )
         ],
       ),
-      body: ProductsGrid(_showFavourites),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator(),) : ProductsGrid(_showFavourites),
     );
   }
 }
