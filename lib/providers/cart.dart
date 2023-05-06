@@ -41,7 +41,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  void addItem(String productId, double price, String title) {
+  Future addItem(String productId, double price, String title) async{
     if (_items.containsKey(productId)) {
       _items.update(
           productId,
@@ -50,6 +50,7 @@ class Cart with ChangeNotifier {
               title: value.title,
               quantity: value.quantity + 1,
               price: value.price));
+
     } else {
       _items.putIfAbsent(
           productId,

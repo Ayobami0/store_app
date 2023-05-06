@@ -5,9 +5,16 @@ import 'package:store_app/providers/orders.dart';
 
 import '../widgets/cart_item.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   static const routeName = '/cartScreen';
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  bool _isPlaced = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,21 +60,50 @@ class CartScreen extends StatelessWidget {
                   ),
                   TextButton(
                       onPressed: () {
-                        Provider.of<Orders>(context, listen: false).addOrders(
-                          cart.items.values.toList(),
-                          cart.totalAmount);
-                          cart.clear();
+                        _isPlaced = true;
+                        Provider.of<Orders>(context, listen: false)
+                            .addOrders(
+                                cart.items.values.toList(), cart.totalAmount)
+                            .then((_) {
+                          showDialog(
+                              context: context,
+                              builder: (ctx) => const OrderPlacedDialog());
+                          setState(() {
+                            _isPlaced = false;
+                          });
+                        });
+                        cart.clear();
                       },
-                      child: Text('ORDER NOW',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          )))
+                      child: _isPlaced
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Text('ORDER NOW',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              )))
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderPlacedDialog extends StatelessWidget {
+  const OrderPlacedDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Success'),
+      content: const Text('Order Placed Successfully'),
+      actions: [
+        ElevatedButton(
+            onPressed: Navigator.of(context).pop, child: const Text('Close'))
+      ],
     );
   }
 }
